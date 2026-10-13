@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>Checkout | STYLE WALK</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .checkout-wrap {
+      max-width: 1100px;
+      margin: auto;
+      padding: 35px 5% 60px;
+    }
+
+    .checkout-wrap h1 {
+      font-size: clamp(38px, 6vw, 60px);
+      margin: 10px 0;
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 35px;
+      margin-top: 30px;
+    }
+
+    .checkout-form, .checkout-summary {
+      padding: 24px;
+      border: 1px solid var(--line);
+      align-self: start;
+    }
+
+    .checkout-summary {
+      background: #eeece6;
+    }
+
+    .checkout-form h2, .checkout-summary h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 0;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field input:focus, .field textarea:focus {
+      outline: 2px solid #777;
+      outline-offset: 1px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .summary-line strong {
+      text-align: right;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: 0;
+      background: var(--ink);
+      color: white;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .checkout-note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+      margin-top: 18px;
+    }
+
+    .checkout-error {
+      color: #a12626;
+      font-size: 12px;
+      margin: 10px 0;
+    }
+
+    @media(max-width:760px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+      .checkout-form, .checkout-summary {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="announcement">ONE MORE STEP TO YOUR NEXT FAVOURITE PAIR</div>
+
+  <header class="header">
+    <a class="brand" href="index.html">
+      <span class="mark">SW</span>
+      <span>STYLE WALK<small>FIND YOUR NEXT STEP</small></span>
+    </a>
+    <nav><a href="products.html">Continue shopping</a></nav>
+    <a href="cart.html">YOUR BAG ↗</a>
+  </header>
+
+  <main class="checkout-wrap">
+    <p class="eyebrow">STYLE WALK / CHECKOUT</p>
+    <h1>Delivery <em>details.</em></h1>
+    <p class="checkout-note">
+      Enter your contact and delivery information. This demo prepares an
+      enquiry for the store; it does not create a confirmed order.
+    </p>
+
+    <div class="checkout-layout">
+      <form id="checkoutForm" class="checkout-form">
+        <h2>Customer information</h2>
+
+        <div class="field">
+          <label for="customerName">Full name *</label>
+          <input id="customerName" name="customerName"
+            autocomplete="name" maxlength="80" required>
+        </div>
+
+        <div class="field">
+          <label for="phone">Mobile number *</label>
+          <input id="phone" name="phone" type="tel"
+            inputmode="numeric" autocomplete="tel"
+            pattern="[6-9][0-9]{9}" maxlength="10"
+            placeholder="10-digit Indian mobile number" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email (optional)</label>
+          <input id="email" name="email" type="email"
+            autocomplete="email" maxlength="120">
+        </div>
+
+        <h2>Delivery address</h2>
+
+        <div class="field">
+          <label for="address">House / street address *</label>
+          <textarea id="address" name="address"
+            autocomplete="street-address" maxlength="300"
+            required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="city">City / town *</label>
+          <input id="city" name="city" autocomplete="address-level2"
+            maxlength="80" required>
+        </div>
+
+        <div class="field">
+          <label for="state">State *</label>
+          <input id="state" name="state" autocomplete="address-level1"
+            maxlength="80" required>
+        </div>
+
+        <div class="field">
+          <label for="pincode">PIN code *</label>
+          <input id="pincode" name="pincode" inputmode="numeric"
+            autocomplete="postal-code" pattern="[0-9]{6}"
+            maxlength="6" required>
+        </div>
+
+        <div class="field">
+          <label for="notes">Delivery notes (optional)</label>
+          <textarea id="notes" name="notes" maxlength="250"
+            placeholder="Landmark or delivery instructions"></textarea>
+        </div>
+
+        <p id="formError" class="checkout-error" role="alert"></p>
+
+        <button class="checkout-btn" type="submit">
+          SEND ORDER ENQUIRY ON WHATSAPP ↗
+        </button>
+
+        <p class="checkout-note">
+          Do not enter payment card details or passwords here.
+          Your form data is not saved to a store database by this demo.
+        </p>
+      </form>
+
+      <aside class="checkout-summary">
+        <h2>Your order enquiry</h2>
+        <div id="orderItems"></div>
+
+        <div class="summary-line">
+          <span>Sample subtotal</span>
+          <strong id="orderSubtotal">₹0</strong>
+        </div>
+
+        <div class="summary-line">
+          <span>Delivery</span>
+          <strong>To be confirmed</strong>
+        </div>
+
+        <div class="summary-line">
+          <strong>Sample total</strong>
+          <strong id="orderTotal">₹0</strong>
+        </div>
+
+        <a class="button light" href="cart.html">EDIT YOUR BAG</a>
+
+        <p class="checkout-note">
+          Prices and stock are illustrative. The store must confirm
+          the final price, availability and delivery charges.
+          No online payment is taken on this page.
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> STYLE WALK</span>
+      <span>STEP INTO YOUR STYLE</span>
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const CART_KEY = "styleWalkCartV1";
+    const WHATSAPP_NUMBER = "917695805080";
+
+    const names = {
+      SW001: "Everyday Runner",
+      SW002: "Street Essential",
+      SW003: "Classic Chic",
+      SW004: "Everyday Comfort",
+      SW005: "Little Explorer",
+      SW006: "Playtime Sneaker",
+      SW007: "Active Flex",
+      SW008: "Weekend Style"
+    };
+
+    function money(amount) {
+      return "₹" + Number(amount).toLocaleString("en-IN");
+    }
+
+    function readCart() {
+      try {
+        const value = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+
+        if (!Array.isArray(value)) return [];
+
+        return value.filter(item =>
+          item &&
+          names[item.id] &&
+          typeof item.size === "string" &&
+          Number.isInteger(item.qty) &&
+          item.qty > 0 &&
+          item.qty <= 99 &&
+          Number.isFinite(item.price) &&
+          item.price >= 0
+        );
+      } catch (error) {
+        return [];
+      }
+    }
+
+    const cart = readCart();
+    const orderItems = document.getElementById("orderItems");
+    const form = document.getElementById("checkoutForm");
+
+    function renderSummary() {
+      if (cart.length === 0) {
+        orderItems.innerHTML =
+          '<p class="checkout-note">Your bag is empty. Please add a product first.</p>';
+        form.querySelector('button[type="submit"]').disabled = true;
+        form.querySelector('button[type="submit"]').style.opacity = ".5";
+        return;
+      }
+
+      orderItems.innerHTML = cart.map(item => `
+        <div class="summary-line">
+          <span>${names[item.id]} · Size ${item.size} × ${item.qty}</span>
+          <strong>${money(item.price * item.qty)}</strong>
+        </div>
+      `).join("");
+
+      const total = cart.reduce(
+        (sum, item) => sum + item.price * item.qty, 0
+      );
+
+      document.getElementById("orderSubtotal").textContent = money(total);
+      document.getElementById("orderTotal").textContent = money(total);
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const error = document.getElementById("formError");
+      error.textContent = "";
+
+      if (!cart.length) {
+        error.textContent = "Your cart is empty. Please add a product first.";
+        return;
+      }
+
+      if (!form.reportValidity()) return;
+
+      const data = new FormData(form);
+
+      const name = String(data.get("customerName") || "").trim();
+      const phone = String(data.get("phone") || "").trim();
+      const email = String(data.get("email") || "").trim();
+      const address = String(data.get("address") || "").trim();
+      const city = String(data.get("city") || "").trim();
+      const state = String(data.get("state") || "").trim();
+      const pincode = String(data.get("pincode") || "").trim();
+      const notes = String(data.get("notes") || "").trim();
+
+      const total = cart.reduce(
+        (sum, item) => sum + item.price * item.qty, 0
+      );
+
+      const lines = cart.map(item =>
+        names[item.id] + " | Size " + item.size +
+        " | Qty " + item.qty +
+        " | " + money(item.price * item.qty)
+      );
+
+      const message = [
+        "STYLE WALK — SAMPLE ORDER ENQUIRY",
+        "",
+        "Customer: " + name,
+        "Mobile: " + phone,
+        email ? "Email: " + email : "",
+        "",
+        "Delivery address:",
+        address,
+        city + ", " + state + " - " + pincode,
+        notes ? "Delivery notes: " + notes : "",
+        "",
+        "Items:",
+        ...lines,
+        "",
+        "Sample subtotal: " + money(total),
+        "Delivery charge: To be confirmed",
+        "",
+        "Please confirm actual product stock, sizes, final prices and delivery.",
+        "This is an enquiry only, not a confirmed order or payment."
+      ].filter(Boolean).join("\n");
+
+      const url = "https://wa.me/" + WHATSAPP_NUMBER +
+        "?text=" + encodeURIComponent(message);
+
+      window.open(url, "_blank", "noopener");
+    });
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderSummary();
+  </script>
+</body>
+</html>
