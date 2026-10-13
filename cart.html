@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Shopping Bag | STYLE WALK</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .cart-page {
+      max-width: 1000px;
+      margin: auto;
+      padding: 35px 5% 60px;
+    }
+    .cart-page h1 {
+      font-size: clamp(36px, 6vw, 58px);
+      margin: 10px 0;
+    }
+    .cart-subtitle {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 30px;
+      margin-top: 32px;
+    }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 95px 1fr;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-item img {
+      width: 95px;
+      aspect-ratio: .85;
+      object-fit: cover;
+      background: var(--cream);
+    }
+    .cart-item h2 {
+      font-size: 15px;
+      font-weight: 500;
+      margin: 0 0 8px;
+    }
+    .cart-muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .cart-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .cart-controls button {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+    }
+    .cart-remove {
+      color: #9d3028;
+    }
+    .cart-summary {
+      align-self: start;
+      background: #eeece6;
+      padding: 24px;
+    }
+    .cart-summary h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-total-row strong {
+      text-align: right;
+    }
+    .cart-action {
+      width: 100%;
+      padding: 15px 10px;
+      margin-top: 14px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: white;
+      cursor: pointer;
+    }
+    .cart-secondary {
+      display: block;
+      text-align: center;
+      padding: 14px 10px;
+      border: 1px solid var(--ink);
+      margin-top: 10px;
+      font-size: 11px;
+    }
+    .cart-empty {
+      padding: 40px 0;
+      line-height: 1.8;
+    }
+    .cart-warning {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    @media(max-width:700px) {
+      .cart-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">YOUR NEXT FAVOURITE PAIR STARTS HERE</div>
+
+  <header class="header">
+    <a class="brand" href="index.html">
+      <span class="mark">SW</span>
+      <span>STYLE WALK<small>FIND YOUR NEXT STEP</small></span>
+    </a>
+    <nav><a href="products.html">Continue shopping</a></nav>
+    <a href="index.html">HOME ↗</a>
+  </header>
+
+  <main class="cart-page">
+    <p class="eyebrow">STYLE WALK / SHOPPING</p>
+    <h1>Your shopping <em>bag.</em></h1>
+    <p class="cart-subtitle">
+      Review your selected footwear before contacting our store.
+    </p>
+
+    <div class="cart-layout">
+      <section>
+        <div id="cartItems" aria-live="polite"></div>
+      </section>
+
+      <aside class="cart-summary">
+        <h2>Order summary</h2>
+        <div class="cart-total-row">
+          <span>Items</span>
+          <strong id="itemCount">0</strong>
+        </div>
+        <div class="cart-total-row">
+          <span>Sample subtotal</span>
+          <strong id="subtotal">₹0</strong>
+        </div>
+        <div class="cart-total-row">
+          <span>Delivery</span>
+          <strong>To be confirmed</strong>
+        </div>
+        <div class="cart-total-row">
+          <strong>Sample total</strong>
+          <strong id="total">₹0</strong>
+        </div>
+
+        <button class="cart-action" id="whatsappOrder">
+          ENQUIRE ON WHATSAPP ↗
+        </button>
+        <a class="cart-secondary" href="products.html">
+          CONTINUE SHOPPING
+        </a>
+
+        <p class="cart-warning">
+          Sample catalogue only. This is not a confirmed order or payment.
+          The store must confirm actual stock, size, price and delivery.
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> STYLE WALK</span>
+      <span>STEP INTO YOUR STYLE</span>
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const CART_KEY = "styleWalkCartV1";
+    const WHATSAPP_NUMBER = "917695805080";
+
+    const catalog = {
+      SW001: {
+        name: "Everyday Runner",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80"
+      },
+      SW002: {
+        name: "Street Essential",
+        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=300&q=80"
+      },
+      SW003: {
+        name: "Classic Chic",
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80"
+      },
+      SW004: {
+        name: "Everyday Comfort",
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80"
+      },
+      SW005: {
+        name: "Little Explorer",
+        image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=300&q=80"
+      },
+      SW006: {
+        name: "Playtime Sneaker",
+        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=300&q=80"
+      },
+      SW007: {
+        name: "Active Flex",
+        image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80"
+      },
+      SW008: {
+        name: "Weekend Style",
+        image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=300&q=80"
+      }
+    };
+
+    const itemsEl = document.getElementById("cartItems");
+
+    function money(amount) {
+      return "₹" + Number(amount).toLocaleString("en-IN");
+    }
+
+    function readCart() {
+      try {
+        const data = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+        if (!Array.isArray(data)) return [];
+
+        return data.filter(item =>
+          item &&
+          typeof item.id === "string" &&
+          catalog[item.id] &&
+          typeof item.size === "string" &&
+          Number.isInteger(item.qty) &&
+          item.qty > 0 &&
+          Number.isFinite(item.price) &&
+          item.price >= 0 &&
+          item.qty <= 99
+        );
+      } catch (error) {
+        return [];
+      }
+    }
+
+    let cart = readCart();
+
+    function persist() {
+      try {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      } catch (error) {
+        alert("Unable to save changes in browser storage.");
+      }
+      render();
+    }
+
+    function render() {
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `
+          <div class="cart-empty">
+            <h2>Your bag is waiting.</h2>
+            <p class="cart-muted">You haven't added any footwear yet.</p>
+            <a class="button dark" href="products.html">EXPLORE FOOTWEAR ↗</a>
+          </div>`;
+      } else {
+        itemsEl.innerHTML = cart.map((item, index) => {
+          const product = catalog[item.id];
+
+          return `
+            <article class="cart-item">
+              <img src="${product.image}" alt="${product.name}">
+              <div>
+                <h2>${product.name}</h2>
+                <div class="cart-muted">
+                  Sample item · Size ${item.size}<br>
+                  ${money(item.price)} each
+                </div>
+                <div class="cart-controls">
+                  <button type="button" data-change="${index}" data-delta="-1"
+                    aria-label="Decrease quantity">−</button>
+                  <strong>${item.qty}</strong>
+                  <button type="button" data-change="${index}" data-delta="1"
+                    aria-label="Increase quantity">+</button>
+                  <button type="button" class="cart-remove"
+                    data-remove="${index}">Remove</button>
+                </div>
+              </div>
+            </article>`;
+        }).join("");
+      }
+
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      document.getElementById("itemCount").textContent = count;
+      document.getElementById("subtotal").textContent = money(total);
+      document.getElementById("total").textContent = money(total);
+    }
+
+    itemsEl.addEventListener("click", event => {
+      const change = event.target.closest("[data-change]");
+      const remove = event.target.closest("[data-remove]");
+
+      if (change) {
+        const index = Number(change.dataset.change);
+        const delta = Number(change.dataset.delta);
+        if (!cart[index]) return;
+
+        cart[index].qty += delta;
+
+        if (cart[index].qty <= 0) {
+          cart.splice(index, 1);
+        } else if (cart[index].qty > 99) {
+          cart[index].qty = 99;
+          alert("Maximum quantity per item is 99.");
+        }
+
+        persist();
+      }
+
+      if (remove) {
+        cart.splice(Number(remove.dataset.remove), 1);
+        persist();
+      }
+    });
+
+    document.getElementById("whatsappOrder").addEventListener("click", () => {
+      if (!cart.length) {
+        alert("Your shopping bag is empty.");
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      const lines = cart.map(item =>
+        catalog[item.id].name +
+        " | Size " + item.size +
+        " | Qty " + item.qty +
+        " | " + money(item.price * item.qty)
+      );
+
+      const message =
+        "Hello STYLE WALK! I would like to enquire about these SAMPLE products:\n\n" +
+        lines.join("\n") +
+        "\n\nSample subtotal: " + money(total) +
+        "\nPlease confirm actual availability, final prices and delivery charges. " +
+        "I understand this message does not place a confirmed order or payment.";
+
+      window.open(
+        "https://wa.me/" + WHATSAPP_NUMBER +
+        "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener"
+      );
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    render();
+  </script>
+</body>
+</html>
