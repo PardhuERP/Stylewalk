@@ -1,0 +1,687 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0">
+  <meta name="description" content="Shop footwear for men, women and kids at STYLE WALK. Browse styles, choose your size and enquire on WhatsApp.">
+  <title>Shop Footwear | STYLE WALK</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .shop-wrap {
+      max-width: 1400px;
+      margin: auto;
+      padding: 32px 5% 60px;
+    }
+
+    .shop-intro {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .shop-intro h1 {
+      font-size: clamp(38px, 6vw, 64px);
+      margin: 12px 0;
+    }
+
+    .shop-intro p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .shop-toolbar {
+      display: flex;
+      gap: 12px;
+      margin: 26px 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .shop-toolbar input,
+    .shop-toolbar select,
+    .shop-size {
+      min-height: 46px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 0;
+    }
+
+    .shop-toolbar input {
+      flex: 1 1 200px;
+      min-width: 0;
+    }
+
+    .shop-toolbar select {
+      flex: 1 1 140px;
+    }
+
+    .shop-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 20px;
+    }
+
+    .shop-tab {
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 12px 18px;
+      white-space: nowrap;
+      color: var(--ink);
+    }
+
+    .shop-tab.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .shop-count {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 18px;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 28px 14px;
+    }
+
+    .shop-card {
+      min-width: 0;
+    }
+
+    .shop-photo {
+      aspect-ratio: .86;
+      background: #e9e3d9;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .shop-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .3s;
+    }
+
+    .shop-card:hover .shop-photo img {
+      transform: scale(1.035);
+    }
+
+    .shop-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #f7f5f0;
+      padding: 7px 9px;
+      font-size: 9px;
+      letter-spacing: .08em;
+    }
+
+    .shop-card-info {
+      padding: 13px 2px;
+    }
+
+    .shop-card-info small {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: .1em;
+    }
+
+    .shop-card-info h2 {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 8px 0;
+    }
+
+    .shop-price {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .shop-old-price {
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: line-through;
+      margin-left: 7px;
+    }
+
+    .shop-size {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .shop-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .shop-actions button {
+      width: 100%;
+      min-height: 43px;
+      padding: 10px 5px;
+      font-size: 10px;
+      letter-spacing: .04em;
+      border: 1px solid var(--ink);
+    }
+
+    .shop-add {
+      background: var(--ink);
+      color: white;
+    }
+
+    .shop-wa {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .shop-cart-bar {
+      position: sticky;
+      bottom: 10px;
+      z-index: 5;
+      margin: 26px 0;
+      padding: 14px;
+      background: var(--ink);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 20px #0002;
+    }
+
+    .shop-cart-bar button {
+      background: white;
+      color: var(--ink);
+      border: 0;
+      padding: 12px 16px;
+      font-weight: 600;
+    }
+
+    .shop-note {
+      background: #eeece6;
+      padding: 20px;
+      margin-top: 35px;
+      line-height: 1.8;
+      font-size: 12px;
+    }
+
+    .shop-empty {
+      padding: 40px 0;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 760px) {
+      .shop-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 10px;
+      }
+
+      .shop-wrap {
+        padding: 20px 4% 40px;
+      }
+
+      .shop-intro {
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="announcement">
+    NEW STYLES, FRESH STEPS — WELCOME TO STYLE WALK
+  </div>
+
+  <header class="header">
+    <a class="brand" href="index.html">
+      <span class="mark">SW</span>
+      <span>
+        STYLE WALK
+        <small>FIND YOUR NEXT STEP</small>
+      </span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <a href="#men" data-category-link="Men">Men</a>
+      <a href="#women" data-category-link="Women">Women</a>
+      <a href="#kids" data-category-link="Kids">Kids</a>
+    </nav>
+
+    <a href="#cart">BAG (<span id="headerCartCount">0</span>)</a>
+  </header>
+
+  <main class="shop-wrap">
+    <section class="shop-intro">
+      <p class="eyebrow">THE STYLE WALK COLLECTION</p>
+      <h1>Find your <em>next pair.</em></h1>
+      <p>
+        Everyday essentials. Fresh designs. Footwear for every step.
+      </p>
+    </section>
+
+    <div class="shop-toolbar">
+      <input id="searchInput" type="search"
+        placeholder="Search shoes..." aria-label="Search products">
+
+      <select id="sortSelect" aria-label="Sort products">
+        <option value="featured">Featured</option>
+        <option value="low">Price: Low to high</option>
+        <option value="high">Price: High to low</option>
+        <option value="name">Name: A to Z</option>
+      </select>
+    </div>
+
+    <div class="shop-tabs" aria-label="Filter by category">
+      <button class="shop-tab active" data-filter="All">All footwear</button>
+      <button class="shop-tab" data-filter="Men" id="men">Men</button>
+      <button class="shop-tab" data-filter="Women" id="women">Women</button>
+      <button class="shop-tab" data-filter="Kids" id="kids">Kids</button>
+    </div>
+
+    <p class="shop-count" id="resultCount" aria-live="polite"></p>
+
+    <section class="shop-grid" id="productGrid"
+      aria-label="Footwear products"></section>
+
+    <div class="shop-note">
+      <strong>Shopping note</strong><br>
+      These are sample products and illustrative prices for website testing.
+      Product sizes, prices and availability must be confirmed by the store
+      before real customer orders are accepted.
+    </div>
+
+    <section id="cart" class="shop-cart-bar">
+      <div>
+        <strong>Your shopping bag</strong>
+        <div id="cartSummary" aria-live="polite">0 items · ₹0</div>
+      </div>
+      <button id="checkoutButton" type="button">VIEW / CHECKOUT ↗</button>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="brand">
+          <span class="mark">SW</span>
+          <span>STYLE WALK</span>
+        </div>
+        <p>Footwear for men, women and kids.</p>
+      </div>
+
+      <div>
+        <strong>SHOP</strong>
+        <a href="#men" data-category-link="Men">Men</a>
+        <a href="#women" data-category-link="Women">Women</a>
+        <a href="#kids" data-category-link="Kids">Kids</a>
+        <a href="index.html">Home</a>
+      </div>
+
+      <div>
+        <strong>CONTACT</strong>
+        <a href="tel:+917695805080">076958 05080</a>
+        <a href="https://maps.app.goo.gl/2FuDF5NV2HDEXXCj6?g_st=ac">
+          Store location
+        </a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> STYLE WALK</span>
+      <span>STEP INTO YOUR STYLE</span>
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const WHATSAPP_NUMBER = "917695805080";
+    const CART_KEY = "styleWalkCartV1";
+
+    // SAMPLE CATALOGUE ONLY.
+    // Replace the names, images, prices and sizes with real store stock.
+    const products = [
+      {
+        id: "SW001",
+        name: "Everyday Runner",
+        category: "Men",
+        type: "Sports Shoes",
+        price: 1299,
+        oldPrice: 1699,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",
+        sizes: ["6", "7", "8", "9", "10"]
+      },
+      {
+        id: "SW002",
+        name: "Street Essential",
+        category: "Men",
+        type: "Casual Shoes",
+        price: 1499,
+        oldPrice: 1899,
+        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80",
+        sizes: ["6", "7", "8", "9", "10"]
+      },
+      {
+        id: "SW003",
+        name: "Classic Chic",
+        category: "Women",
+        type: "Fashion Footwear",
+        price: 999,
+        oldPrice: 1299,
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80",
+        sizes: ["3", "4", "5", "6", "7", "8"]
+      },
+      {
+        id: "SW004",
+        name: "Everyday Comfort",
+        category: "Women",
+        type: "Casual Footwear",
+        price: 1199,
+        oldPrice: 1499,
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80",
+        sizes: ["3", "4", "5", "6", "7", "8"]
+      },
+      {
+        id: "SW005",
+        name: "Little Explorer",
+        category: "Kids",
+        type: "Kids Shoes",
+        price: 699,
+        oldPrice: 899,
+        image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=700&q=80",
+        sizes: ["1", "2", "3", "4", "5"]
+      },
+      {
+        id: "SW006",
+        name: "Playtime Sneaker",
+        category: "Kids",
+        type: "Casual Shoes",
+        price: 799,
+        oldPrice: 999,
+        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80",
+        sizes: ["1", "2", "3", "4", "5"]
+      },
+      {
+        id: "SW007",
+        name: "Active Flex",
+        category: "Men",
+        type: "Sports Shoes",
+        price: 1799,
+        oldPrice: 2199,
+        image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80",
+        sizes: ["6", "7", "8", "9", "10"]
+      },
+      {
+        id: "SW008",
+        name: "Weekend Style",
+        category: "Women",
+        type: "Casual Footwear",
+        price: 1399,
+        oldPrice: 1699,
+        image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=700&q=80",
+        sizes: ["3", "4", "5", "6", "7", "8"]
+      }
+    ];
+
+    let activeCategory = "All";
+    const grid = document.getElementById("productGrid");
+
+    function money(value) {
+      return "₹" + Number(value).toLocaleString("en-IN");
+    }
+
+    function readCart() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    let cart = readCart();
+
+    function saveCart() {
+      try {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      } catch (error) {
+        alert("Your browser could not save the cart. Please check browser storage settings.");
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      document.getElementById("headerCartCount").textContent = count;
+      document.getElementById("cartSummary").textContent =
+        count + (count === 1 ? " item · " : " items · ") + money(total);
+    }
+
+    function renderProducts() {
+      const search = document.getElementById("searchInput").value
+        .trim().toLowerCase();
+
+      const sort = document.getElementById("sortSelect").value;
+
+      let shown = products.filter(product => {
+        const categoryMatch =
+          activeCategory === "All" || product.category === activeCategory;
+
+        const searchMatch =
+          (product.name + " " + product.category + " " + product.type)
+            .toLowerCase().includes(search);
+
+        return categoryMatch && searchMatch;
+      });
+
+      if (sort === "low") shown.sort((a, b) => a.price - b.price);
+      if (sort === "high") shown.sort((a, b) => b.price - a.price);
+      if (sort === "name") shown.sort((a, b) => a.name.localeCompare(b.name));
+
+      document.getElementById("resultCount").textContent =
+        shown.length + (shown.length === 1 ? " sample style" : " sample styles");
+
+      if (!shown.length) {
+        grid.innerHTML =
+          '<p class="shop-empty">No styles found. Try another search or category.</p>';
+        return;
+      }
+
+      grid.innerHTML = shown.map(product => `
+        <article class="shop-card" data-product="${product.id}">
+          <div class="shop-photo">
+            <img src="${product.image}" alt="${product.name}"
+              loading="lazy" referrerpolicy="no-referrer">
+            <span class="shop-tag">SAMPLE</span>
+          </div>
+
+          <div class="shop-card-info">
+            <small>${product.category} · ${product.type}</small>
+            <h2>${product.name}</h2>
+            <div>
+              <span class="shop-price">${money(product.price)}</span>
+              <span class="shop-old-price">${money(product.oldPrice)}</span>
+            </div>
+
+            <label>
+              <span class="eyebrow" style="display:block;margin:12px 0 0">
+                SELECT SIZE
+              </span>
+              <select class="shop-size" aria-label="Choose size for ${product.name}">
+                <option value="">Choose size</option>
+                ${product.sizes.map(size =>
+                  `<option value="${size}">${size}</option>`
+                ).join("")}
+              </select>
+            </label>
+
+            <div class="shop-actions">
+              <button class="shop-add" type="button"
+                data-add="${product.id}">ADD TO CART +</button>
+              <button class="shop-wa" type="button"
+                data-wa="${product.id}">ASK ON WHATSAPP ↗</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function findProduct(id) {
+      return products.find(product => product.id === id);
+    }
+
+    function selectedSize(id) {
+      const card = grid.querySelector(`[data-product="${id}"]`);
+      return card ? card.querySelector(".shop-size").value : "";
+    }
+
+    function addToCart(id) {
+      const product = findProduct(id);
+      const size = selectedSize(id);
+
+      if (!size) {
+        alert("Please choose a size first.");
+        return;
+      }
+
+      const existing = cart.find(item =>
+        item.id === id && item.size === size
+      );
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          size: size,
+          price: product.price,
+          qty: 1
+        });
+      }
+
+      saveCart();
+      alert(product.name + " added to your cart. Remember, this is a sample item.");
+    }
+
+    function askWhatsApp(id) {
+      const product = findProduct(id);
+      const size = selectedSize(id);
+
+      if (!size) {
+        alert("Please choose a size first.");
+        return;
+      }
+
+      const message =
+        "Hello STYLE WALK! I want to enquire about this SAMPLE product: " +
+        product.name + " (" + product.category + "), size " + size +
+        ", displayed sample price " + money(product.price) +
+        ". Please confirm actual availability and price.";
+
+      window.open(
+        "https://wa.me/" + WHATSAPP_NUMBER +
+        "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener"
+      );
+    }
+
+    document.querySelectorAll("[data-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeCategory = button.dataset.filter;
+
+        document.querySelectorAll("[data-filter]").forEach(tab => {
+          tab.classList.toggle("active", tab === button);
+        });
+
+        renderProducts();
+      });
+    });
+
+    document.querySelectorAll("[data-category-link]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        activeCategory = link.dataset.categoryLink;
+
+        document.querySelectorAll("[data-filter]").forEach(tab => {
+          tab.classList.toggle("active", tab.dataset.filter === activeCategory);
+        });
+
+        renderProducts();
+        document.getElementById("featured")?.scrollIntoView();
+        document.getElementById("productGrid").scrollIntoView();
+      });
+    });
+
+    grid.addEventListener("click", event => {
+      const addButton = event.target.closest("[data-add]");
+      const waButton = event.target.closest("[data-wa]");
+
+      if (addButton) addToCart(addButton.dataset.add);
+      if (waButton) askWhatsApp(waButton.dataset.wa);
+    });
+
+    document.getElementById("searchInput")
+      .addEventListener("input", renderProducts);
+
+    document.getElementById("sortSelect")
+      .addEventListener("change", renderProducts);
+
+    document.getElementById("checkoutButton")
+      .addEventListener("click", () => {
+        if (!cart.length) {
+          alert("Your cart is empty. Add a sample product first.");
+          return;
+        }
+
+        const lines = cart.map(item =>
+          item.name + " | Size: " + item.size +
+          " | Qty: " + item.qty + " | " + money(item.price * item.qty)
+        );
+
+        const total = cart.reduce(
+          (sum, item) => sum + item.price * item.qty, 0
+        );
+
+        const message =
+          "Hello STYLE WALK! I want to enquire about my SAMPLE cart:\n\n" +
+          lines.join("\n") +
+          "\n\nSample total: " + money(total) +
+          "\nPlease confirm actual product availability, prices and delivery.";
+
+        const proceed = confirm(
+          "This is a SAMPLE cart, not a confirmed order or payment.\n\n" +
+          "Open WhatsApp to enquire about these items?"
+        );
+
+        if (proceed) {
+          window.open(
+            "https://wa.me/" + WHATSAPP_NUMBER +
+            "?text=" + encodeURIComponent(message),
+            "_blank",
+            "noopener"
+          );
+        }
+      });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    renderProducts();
+    updateCart();
+  </script>
+</body>
+</html>
