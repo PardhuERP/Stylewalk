@@ -349,92 +349,62 @@
     const CART_KEY = "styleWalkCartV1";
 
     // SAMPLE CATALOGUE ONLY.
-    // Replace the names, images, prices and sizes with real store stock.
-    const products = [
-      {
-        id: "SW001",
-        name: "Everyday Runner",
-        category: "Men",
-        type: "Sports Shoes",
-        price: 1299,
-        oldPrice: 1699,
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",
-        sizes: ["6", "7", "8", "9", "10"]
-      },
-      {
-        id: "SW002",
-        name: "Street Essential",
-        category: "Men",
-        type: "Casual Shoes",
-        price: 1499,
-        oldPrice: 1899,
-        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80",
-        sizes: ["6", "7", "8", "9", "10"]
-      },
-      {
-        id: "SW003",
-        name: "Classic Chic",
-        category: "Women",
-        type: "Fashion Footwear",
-        price: 999,
-        oldPrice: 1299,
-        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80",
-        sizes: ["3", "4", "5", "6", "7", "8"]
-      },
-      {
-        id: "SW004",
-        name: "Everyday Comfort",
-        category: "Women",
-        type: "Casual Footwear",
-        price: 1199,
-        oldPrice: 1499,
-        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80",
-        sizes: ["3", "4", "5", "6", "7", "8"]
-      },
-      {
-        id: "SW005",
-        name: "Little Explorer",
-        category: "Kids",
-        type: "Kids Shoes",
-        price: 699,
-        oldPrice: 899,
-        image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=700&q=80",
-        sizes: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: "SW006",
-        name: "Playtime Sneaker",
-        category: "Kids",
-        type: "Casual Shoes",
-        price: 799,
-        oldPrice: 999,
-        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80",
-        sizes: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: "SW007",
-        name: "Active Flex",
-        category: "Men",
-        type: "Sports Shoes",
-        price: 1799,
-        oldPrice: 2199,
-        image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80",
-        sizes: ["6", "7", "8", "9", "10"]
-      },
-      {
-        id: "SW008",
-        name: "Weekend Style",
-        category: "Women",
-        type: "Casual Footwear",
-        price: 1399,
-        oldPrice: 1699,
-        image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=700&q=80",
-        sizes: ["3", "4", "5", "6", "7", "8"]
-      }
-    ];
+    
+const API_URL = "https://script.google.com/macros/s/AKfycbx6Ycmc-UGrEmiiclFYJ8JH8Ldi1vr0vlvWG-7XSfIV9WLDg90TWW95K5Q_bdUY2vz6uw/exec";
 
-    let activeCategory = "All";
-    const grid = document.getElementById("productGrid");
+let products = [];
+let activeCategory = "All";
+
+const grid = document.getElementById("productGrid");
+
+async function loadProducts() {
+  if (grid) {
+    grid.innerHTML = "<p>Loading latest products...</p>";
+  }
+
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error("API request failed: " + response.status);
+    }
+
+    const data = await response.json();
+
+    if (!data.success || !Array.isArray(data.products)) {
+      throw new Error(data.error || "Invalid product data");
+    }
+
+    products = data.products.map(product => ({
+      ...product,
+      sizes: (product.sizes || []).map(item => String(item.size)),
+      sizeStock: Object.fromEntries(
+        (product.sizes || []).map(item => [
+          String(item.size),
+          Number(item.stock) || 0
+        ])
+      )
+    }));
+
+    if (typeof renderProducts === "function") {
+      renderProducts();
+    } else if (typeof displayProducts === "function") {
+      displayProducts();
+    } else if (grid) {
+      grid.innerHTML = "<p>Products loaded, but the display function needs checking.</p>";
+    }
+  } catch (error) {
+    console.error("STYLE WALK catalogue error:", error);
+
+    if (grid) {
+      grid.innerHTML =
+        "<p>Unable to load products. Please refresh and try again.</p>";
+    }
+  }
+}
+
+loadProducts();
+
 
     function money(value) {
       return "₹" + Number(value).toLocaleString("en-IN");
