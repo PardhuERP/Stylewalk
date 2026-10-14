@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,6 +71,7 @@
       padding: 12px 18px;
       white-space: nowrap;
       color: var(--ink);
+      cursor: pointer;
     }
 
     .shop-tab.active {
@@ -171,6 +173,7 @@
       font-size: 10px;
       letter-spacing: .04em;
       border: 1px solid var(--ink);
+      cursor: pointer;
     }
 
     .shop-add {
@@ -204,6 +207,7 @@
       border: 0;
       padding: 12px 16px;
       font-weight: 600;
+      cursor: pointer;
     }
 
     .shop-note {
@@ -218,6 +222,12 @@
       padding: 40px 0;
       color: var(--muted);
       grid-column: 1 / -1;
+    }
+
+    @media (max-width: 1000px) {
+      .shop-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 760px) {
@@ -257,7 +267,9 @@
       <a href="#kids" data-category-link="Kids">Kids</a>
     </nav>
 
-    <a href="#cart">BAG (<span id="headerCartCount">0</span>)</a>
+    <a href="cart.html">
+      BAG (<span id="headerCartCount">0</span>)
+    </a>
   </header>
 
   <main class="shop-wrap">
@@ -270,8 +282,12 @@
     </section>
 
     <div class="shop-toolbar">
-      <input id="searchInput" type="search"
-        placeholder="Search shoes..." aria-label="Search products">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search shoes..."
+        aria-label="Search products"
+      >
 
       <select id="sortSelect" aria-label="Sort products">
         <option value="featured">Featured</option>
@@ -282,22 +298,37 @@
     </div>
 
     <div class="shop-tabs" aria-label="Filter by category">
-      <button class="shop-tab active" data-filter="All">All footwear</button>
-      <button class="shop-tab" data-filter="Men" id="men">Men</button>
-      <button class="shop-tab" data-filter="Women" id="women">Women</button>
-      <button class="shop-tab" data-filter="Kids" id="kids">Kids</button>
+      <button class="shop-tab active" data-filter="All">
+        All footwear
+      </button>
+      <button class="shop-tab" data-filter="Men" id="men">
+        Men
+      </button>
+      <button class="shop-tab" data-filter="Women" id="women">
+        Women
+      </button>
+      <button class="shop-tab" data-filter="Kids" id="kids">
+        Kids
+      </button>
     </div>
 
-    <p class="shop-count" id="resultCount" aria-live="polite"></p>
+    <p class="shop-count" id="resultCount" aria-live="polite">
+      Connecting to inventory...
+    </p>
 
-    <section class="shop-grid" id="productGrid"
-      aria-label="Footwear products"></section>
+    <section
+      class="shop-grid"
+      id="productGrid"
+      aria-label="Footwear products"
+    ></section>
 
     <div class="shop-note">
-      <strong>Shopping note</strong><br>
-      These are sample products and illustrative prices for website testing.
-      Product sizes, prices and availability must be confirmed by the store
-      before real customer orders are accepted.
+      <strong>Shopping note</strong>
+      <p>
+        Products, prices and available sizes are loaded from the STYLE WALK
+        inventory. Stock can change. Please confirm availability and final
+        price with the store before placing an order.
+      </p>
     </div>
 
     <section id="cart" class="shop-cart-bar">
@@ -305,8 +336,14 @@
         <strong>Your shopping bag</strong>
         <div id="cartSummary" aria-live="polite">0 items · ₹0</div>
       </div>
-      <button id="checkoutButton" type="button"
-  onclick="location.href='cart.html'">VIEW CART ↗</button>
+
+      <button
+        id="checkoutButton"
+        type="button"
+        onclick="location.href='cart.html'"
+      >
+        VIEW CART ↗
+      </button>
     </section>
   </main>
 
@@ -336,6 +373,7 @@
         </a>
       </div>
     </div>
+
     <div class="foot-bottom">
       <span>© <span id="year"></span> STYLE WALK</span>
       <span>STEP INTO YOUR STYLE</span>
@@ -348,66 +386,27 @@
     const WHATSAPP_NUMBER = "917695805080";
     const CART_KEY = "styleWalkCartV1";
 
-    // SAMPLE CATALOGUE ONLY.
-    
-const API_URL = "https://script.google.com/macros/s/AKfycbx6Ycmc-UGrEmiiclFYJ8JH8Ldi1vr0vlvWG-7XSfIV9WLDg90TWW95K5Q_bdUY2vz6uw/exec";
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbx6Ycmc-UGrEmiiclFYJ8JH8Ldi1vr0vlvWG-7XSfIV9WLDg90TWW95K5Q_bdUY2vz6uw/exec";
 
-let products = [];
-let activeCategory = "All";
+    let products = [];
+    let activeCategory = "All";
+    let cart = readCart();
 
-const grid = document.getElementById("productGrid");
-
-async function loadProducts() {
-  if (grid) {
-    grid.innerHTML = "<p>Loading latest products...</p>";
-  }
-
-  try {
-    const response = await fetch(API_URL);
-
-    if (!response.ok) {
-      throw new Error("API request failed: " + response.status);
-    }
-
-    const data = await response.json();
-
-    if (!data.success || !Array.isArray(data.products)) {
-      throw new Error(data.error || "Invalid product data");
-    }
-
-    products = data.products.map(product => ({
-      ...product,
-      sizes: (product.sizes || []).map(item => String(item.size)),
-      sizeStock: Object.fromEntries(
-        (product.sizes || []).map(item => [
-          String(item.size),
-          Number(item.stock) || 0
-        ])
-      )
-    }));
-
-    if (typeof renderProducts === "function") {
-      renderProducts();
-    } else if (typeof displayProducts === "function") {
-      displayProducts();
-    } else if (grid) {
-      grid.innerHTML = "<p>Products loaded, but the display function needs checking.</p>";
-    }
-  } catch (error) {
-    console.error("STYLE WALK catalogue error:", error);
-
-    if (grid) {
-      grid.innerHTML =
-        "<p>Unable to load products. Please refresh and try again.</p>";
-    }
-  }
-}
-
-loadProducts();
-
+    const grid = document.getElementById("productGrid");
 
     function money(value) {
-      return "₹" + Number(value).toLocaleString("en-IN");
+      return "₹" + Number(value || 0).toLocaleString("en-IN");
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
     }
 
     function readCart() {
@@ -419,94 +418,204 @@ loadProducts();
       }
     }
 
-    let cart = readCart();
-
     function saveCart() {
       try {
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
       } catch (error) {
-        alert("Your browser could not save the cart. Please check browser storage settings.");
+        alert("Unable to save your cart. Check browser storage.");
       }
+
       updateCart();
     }
 
     function updateCart() {
-      const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      localStorage.setItem("styleWalkCartV1", JSON.stringify(cart));
+      const count = cart.reduce(
+        (sum, item) => sum + (Number(item.qty) || 0), 0
+      );
+
+      const total = cart.reduce(
+        (sum, item) =>
+          sum + (Number(item.price) || 0) * (Number(item.qty) || 0), 0
+      );
 
       document.getElementById("headerCartCount").textContent = count;
+
       document.getElementById("cartSummary").textContent =
         count + (count === 1 ? " item · " : " items · ") + money(total);
     }
 
+    async function loadProducts() {
+      grid.innerHTML =
+        '<p class="shop-empty">Loading latest collection...</p>';
+
+      try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error("API request failed: " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.products)) {
+          throw new Error(data.error || "Invalid product data");
+        }
+
+        products = data.products.map(product => ({
+          ...product,
+          sizes: (product.sizes || [])
+            .map(item => ({
+              size: String(item.size),
+              stock: Math.max(0, Number(item.stock) || 0)
+            }))
+            .filter(item => item.stock > 0)
+        }));
+
+        renderProducts();
+      } catch (error) {
+        console.error("STYLE WALK API error:", error);
+
+        grid.innerHTML =
+          '<p class="shop-empty">Unable to load the collection. Please refresh and try again.</p>';
+
+        document.getElementById("resultCount").textContent =
+          "Catalogue temporarily unavailable";
+      }
+    }
+
     function renderProducts() {
-      const search = document.getElementById("searchInput").value
-        .trim().toLowerCase();
+      const search = document.getElementById("searchInput")
+        .value.trim().toLowerCase();
 
       const sort = document.getElementById("sortSelect").value;
 
       let shown = products.filter(product => {
         const categoryMatch =
-          activeCategory === "All" || product.category === activeCategory;
+          activeCategory === "All" ||
+          product.category === activeCategory;
 
         const searchMatch =
-          (product.name + " " + product.category + " " + product.type)
-            .toLowerCase().includes(search);
+          (
+            product.name + " " +
+            product.category + " " +
+            product.type
+          ).toLowerCase().includes(search);
 
         return categoryMatch && searchMatch;
       });
 
-      if (sort === "low") shown.sort((a, b) => a.price - b.price);
-      if (sort === "high") shown.sort((a, b) => b.price - a.price);
-      if (sort === "name") shown.sort((a, b) => a.name.localeCompare(b.name));
+      if (sort === "low") {
+        shown.sort((a, b) => a.price - b.price);
+      }
+
+      if (sort === "high") {
+        shown.sort((a, b) => b.price - a.price);
+      }
+
+      if (sort === "name") {
+        shown.sort((a, b) => a.name.localeCompare(b.name));
+      }
 
       document.getElementById("resultCount").textContent =
-        shown.length + (shown.length === 1 ? " sample style" : " sample styles");
+        shown.length + (shown.length === 1 ? " product" : " products");
 
       if (!shown.length) {
         grid.innerHTML =
-          '<p class="shop-empty">No styles found. Try another search or category.</p>';
+          '<p class="shop-empty">No products found. Try another search or category.</p>';
         return;
       }
 
-      grid.innerHTML = shown.map(product => `
-        <article class="shop-card" data-product="${product.id}">
-          <div class="shop-photo">
-            <img src="${product.image}" alt="${product.name}"
-              loading="lazy" referrerpolicy="no-referrer">
-            <span class="shop-tag">SAMPLE</span>
-          </div>
+      grid.innerHTML = shown.map(product => {
+        const id = escapeHTML(product.id);
+        const name = escapeHTML(product.name);
+        const category = escapeHTML(product.category);
+        const type = escapeHTML(product.type);
 
-          <div class="shop-card-info">
-            <small>${product.category} · ${product.type}</small>
-            <h2>${product.name}</h2>
-            <div>
-              <span class="shop-price">${money(product.price)}</span>
-              <span class="shop-old-price">${money(product.oldPrice)}</span>
+        const image = /^https?:\/\/\S+$/i.test(product.image || "")
+          ? escapeHTML(product.image)
+          : "";
+
+        const sizes = product.sizes.map(item => {
+          const alreadyInCart = cart
+            .filter(line =>
+              line.id === product.id && String(line.size) === item.size
+            )
+            .reduce((sum, line) => sum + (Number(line.qty) || 0), 0);
+
+          const remaining = Math.max(0, item.stock - alreadyInCart);
+
+          return `
+            <option
+              value="${escapeHTML(item.size)}"
+              ${remaining === 0 ? "disabled" : ""}
+            >
+              ${escapeHTML(item.size)} — ${remaining} available
+            </option>`;
+        }).join("");
+
+        const oldPrice =
+          Number(product.oldPrice) > Number(product.price)
+            ? `<span class="shop-old-price">${money(product.oldPrice)}</span>`
+            : "";
+
+        return `
+          <article class="shop-card" data-product="${id}">
+            <div class="shop-photo">
+              <img
+                src="${image}"
+                alt="${name}"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              >
+              <span class="shop-tag">IN STOCK</span>
             </div>
 
-            <label>
-              <span class="eyebrow" style="display:block;margin:12px 0 0">
-                SELECT SIZE
-              </span>
-              <select class="shop-size" aria-label="Choose size for ${product.name}">
-                <option value="">Choose size</option>
-                ${product.sizes.map(size =>
-                  `<option value="${size}">${size}</option>`
-                ).join("")}
-              </select>
-            </label>
+            <div class="shop-card-info">
+              <small>${category} · ${type}</small>
+              <h2>${name}</h2>
 
-            <div class="shop-actions">
-              <button class="shop-add" type="button"
-                data-add="${product.id}">ADD TO CART +</button>
-              <button class="shop-wa" type="button"
-                data-wa="${product.id}">ASK ON WHATSAPP ↗</button>
+              <div>
+                <span class="shop-price">${money(product.price)}</span>
+                ${oldPrice}
+              </div>
+
+              <label>
+                <span
+                  class="eyebrow"
+                  style="display:block;margin:12px 0 0"
+                >
+                  SELECT SIZE
+                </span>
+
+                <select
+                  class="shop-size"
+                  aria-label="Choose size for ${name}"
+                >
+                  <option value="">Choose size</option>
+                  ${sizes}
+                </select>
+              </label>
+
+              <div class="shop-actions">
+                <button
+                  class="shop-add"
+                  type="button"
+                  data-add="${id}"
+                >
+                  ADD TO CART +
+                </button>
+
+                <button
+                  class="shop-wa"
+                  type="button"
+                  data-wa="${id}"
+                >
+                  ASK ON WHATSAPP ↗
+                </button>
+              </div>
             </div>
-          </div>
-        </article>
-      `).join("");
+          </article>`;
+      }).join("");
     }
 
     function findProduct(id) {
@@ -514,12 +623,37 @@ loadProducts();
     }
 
     function selectedSize(id) {
-      const card = grid.querySelector(`[data-product="${id}"]`);
+      const card = grid.querySelector(
+        `[data-product="${CSS.escape(id)}"]`
+      );
+
       return card ? card.querySelector(".shop-size").value : "";
+    }
+
+    function availableStock(product, size) {
+      const entry = product.sizes.find(
+        item => item.size === String(size)
+      );
+
+      return entry ? entry.stock : 0;
+    }
+
+    function cartQuantity(id, size) {
+      return cart
+        .filter(item =>
+          item.id === id && String(item.size) === String(size)
+        )
+        .reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
     }
 
     function addToCart(id) {
       const product = findProduct(id);
+
+      if (!product) {
+        alert("This product is no longer available in the catalogue.");
+        return;
+      }
+
       const size = selectedSize(id);
 
       if (!size) {
@@ -527,8 +661,13 @@ loadProducts();
         return;
       }
 
+      if (cartQuantity(id, size) >= availableStock(product, size)) {
+        alert("Sorry, no more stock is available for this size.");
+        return;
+      }
+
       const existing = cart.find(item =>
-        item.id === id && item.size === size
+        item.id === id && String(item.size) === String(size)
       );
 
       if (existing) {
@@ -539,17 +678,22 @@ loadProducts();
           name: product.name,
           category: product.category,
           size: size,
-          price: product.price,
+          price: Number(product.price),
           qty: 1
         });
       }
 
       saveCart();
-      alert(product.name + " added to your cart. Remember, this is a sample item.");
+      renderProducts();
+
+      alert(product.name + " added to your shopping bag.");
     }
 
     function askWhatsApp(id) {
       const product = findProduct(id);
+
+      if (!product) return;
+
       const size = selectedSize(id);
 
       if (!size) {
@@ -558,16 +702,17 @@ loadProducts();
       }
 
       const message =
-        "Hello STYLE WALK! I want to enquire about this SAMPLE product: " +
-        product.name + " (" + product.category + "), size " + size +
-        ", displayed sample price " + money(product.price) +
-        ". Please confirm actual availability and price.";
+        "Hello STYLE WALK! I would like to enquire about:\n\n" +
+        "Product: " + product.name + "\n" +
+        "Category: " + product.category + "\n" +
+        "Size: " + size + "\n" +
+        "Displayed price: " + money(product.price) + "\n\n" +
+        "Please confirm current availability and final price.";
 
       window.open(
         "https://wa.me/" + WHATSAPP_NUMBER +
         "?text=" + encodeURIComponent(message),
-        "_blank",
-        "noopener"
+        "_blank"
       );
     }
 
@@ -586,15 +731,18 @@ loadProducts();
     document.querySelectorAll("[data-category-link]").forEach(link => {
       link.addEventListener("click", event => {
         event.preventDefault();
+
         activeCategory = link.dataset.categoryLink;
 
         document.querySelectorAll("[data-filter]").forEach(tab => {
-          tab.classList.toggle("active", tab.dataset.filter === activeCategory);
+          tab.classList.toggle(
+            "active",
+            tab.dataset.filter === activeCategory
+          );
         });
 
         renderProducts();
-        document.getElementById("featured")?.scrollIntoView();
-        document.getElementById("productGrid").scrollIntoView();
+        grid.scrollIntoView({ behavior: "smooth" });
       });
     });
 
@@ -602,8 +750,13 @@ loadProducts();
       const addButton = event.target.closest("[data-add]");
       const waButton = event.target.closest("[data-wa]");
 
-      if (addButton) addToCart(addButton.dataset.add);
-      if (waButton) askWhatsApp(waButton.dataset.wa);
+      if (addButton) {
+        addToCart(addButton.dataset.add);
+      }
+
+      if (waButton) {
+        askWhatsApp(waButton.dataset.wa);
+      }
     });
 
     document.getElementById("searchInput")
@@ -612,47 +765,11 @@ loadProducts();
     document.getElementById("sortSelect")
       .addEventListener("change", renderProducts);
 
-    document.getElementById("checkoutButton")
-      .addEventListener("click", () => {
-        if (!cart.length) {
-          alert("Your cart is empty. Add a sample product first.");
-          return;
-        }
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
-        const lines = cart.map(item =>
-          item.name + " | Size: " + item.size +
-          " | Qty: " + item.qty + " | " + money(item.price * item.qty)
-        );
-
-        const total = cart.reduce(
-          (sum, item) => sum + item.price * item.qty, 0
-        );
-
-        const message =
-          "Hello STYLE WALK! I want to enquire about my SAMPLE cart:\n\n" +
-          lines.join("\n") +
-          "\n\nSample total: " + money(total) +
-          "\nPlease confirm actual product availability, prices and delivery.";
-
-        const proceed = confirm(
-          "This is a SAMPLE cart, not a confirmed order or payment.\n\n" +
-          "Open WhatsApp to enquire about these items?"
-        );
-
-        if (proceed) {
-          window.open(
-            "https://wa.me/" + WHATSAPP_NUMBER +
-            "?text=" + encodeURIComponent(message),
-            "_blank",
-            "noopener"
-          );
-        }
-      });
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    renderProducts();
     updateCart();
+    loadProducts();
   </script>
 </body>
 </html>
