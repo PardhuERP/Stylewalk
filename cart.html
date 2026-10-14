@@ -1,371 +1,695 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Shopping Bag | STYLE WALK</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    .cart-page {
-      max-width: 1000px;
-      margin: auto;
-      padding: 35px 5% 60px;
-    }
-    .cart-page h1 {
-      font-size: clamp(36px, 6vw, 58px);
-      margin: 10px 0;
-    }
-    .cart-subtitle {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-    .cart-layout {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 30px;
-      margin-top: 32px;
-    }
-    .cart-item {
-      display: grid;
-      grid-template-columns: 95px 1fr;
-      gap: 16px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .cart-item img {
-      width: 95px;
-      aspect-ratio: .85;
-      object-fit: cover;
-      background: var(--cream);
-    }
-    .cart-item h2 {
-      font-size: 15px;
-      font-weight: 500;
-      margin: 0 0 8px;
-    }
-    .cart-muted {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-    .cart-controls {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .cart-controls button {
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      background: transparent;
-    }
-    .cart-remove {
-      color: #9d3028;
-    }
-    .cart-summary {
-      align-self: start;
-      background: #eeece6;
-      padding: 24px;
-    }
-    .cart-summary h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-    .cart-total-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .cart-total-row strong {
-      text-align: right;
-    }
-    .cart-action {
-      width: 100%;
-      padding: 15px 10px;
-      margin-top: 14px;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: white;
-      cursor: pointer;
-    }
-    .cart-secondary {
-      display: block;
-      text-align: center;
-      padding: 14px 10px;
-      border: 1px solid var(--ink);
-      margin-top: 10px;
-      font-size: 11px;
-    }
-    .cart-empty {
-      padding: 40px 0;
-      line-height: 1.8;
-    }
-    .cart-warning {
-      margin-top: 20px;
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-    @media(max-width:700px) {
-      .cart-layout { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Cart | STYLE WALK</title>
+<meta name="theme-color" content="#111111">
+
+<style>
+:root {
+  --black: #111;
+  --gold: #c6a15b;
+  --cream: #f8f6f1;
+  --muted: #777;
+  --border: #e8e5df;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--black);
+  background: #fff;
+}
+header {
+  background: var(--black);
+  color: #fff;
+  padding: 20px 16px;
+  text-align: center;
+}
+.brand {
+  color: var(--gold);
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+header p {
+  color: #ddd;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 8px 0 0;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+nav a {
+  color: var(--black);
+  text-decoration: none;
+  font-size: 13px;
+}
+nav a:hover { color: var(--gold); }
+.container {
+  width: min(1100px, 94%);
+  margin: 32px auto 60px;
+}
+.heading {
+  margin-bottom: 24px;
+}
+.heading h1 {
+  font-size: clamp(26px, 5vw, 38px);
+  margin: 0 0 8px;
+}
+.heading p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 14px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  background: #fff;
+}
+.panel h2 {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+.item {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 15px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+}
+.item:first-child { padding-top: 0; }
+.item:last-child { border-bottom: 0; }
+.item img {
+  width: 100px;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--cream);
+}
+.item-name {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.item-meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.item-price {
+  font-weight: 700;
+  margin: 9px 0;
+}
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.qty {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  align-items: center;
+  overflow: hidden;
+}
+.qty button {
+  border: 0;
+  background: var(--cream);
+  width: 31px;
+  height: 30px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.qty span {
+  min-width: 30px;
+  text-align: center;
+  font-size: 13px;
+}
+.remove {
+  border: 0;
+  background: transparent;
+  color: #a33;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 8px;
+}
+.notice {
+  margin-top: 10px;
+  color: #a33;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.summary-row.total {
+  border-bottom: 0;
+  font-size: 19px;
+  font-weight: 800;
+  padding-top: 18px;
+}
+.muted { color: var(--muted); }
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px 12px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 7px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-dark {
+  background: var(--black);
+  color: #fff;
+}
+.btn-gold {
+  background: var(--gold);
+  color: #111;
+}
+.btn-light {
+  border: 1px solid var(--border);
+  color: #111;
+  background: #fff;
+}
+.btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.empty {
+  text-align: center;
+  padding: 35px 10px;
+}
+.empty .icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+.empty p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.status {
+  padding: 12px;
+  border-radius: 7px;
+  background: var(--cream);
+  color: #555;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+.status.error {
+  color: #9c2929;
+  background: #fff0f0;
+}
+footer {
+  background: #111;
+  color: #ddd;
+  text-align: center;
+  padding: 25px 12px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+@media (max-width: 700px) {
+  .layout { grid-template-columns: 1fr; }
+  .container { margin-top: 24px; }
+  .panel { padding: 15px; }
+  .item { grid-template-columns: 85px minmax(0, 1fr); gap: 12px; }
+  .item img { width: 85px; height: 95px; }
+}
+</style>
 </head>
+
 <body>
-  <div class="announcement">YOUR NEXT FAVOURITE PAIR STARTS HERE</div>
+<header>
+  <div class="brand">STYLE WALK</div>
+  <p>STEP INTO YOUR STYLE</p>
+</header>
 
-  <header class="header">
-    <a class="brand" href="index.html">
-      <span class="mark">SW</span>
-      <span>STYLE WALK<small>FIND YOUR NEXT STEP</small></span>
-    </a>
-    <nav><a href="products.html">Continue shopping</a></nav>
-    <a href="index.html">HOME ↗</a>
-  </header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="products.html">Shop</a>
+  <a href="cart.html">My Cart</a>
+</nav>
 
-  <main class="cart-page">
-    <p class="eyebrow">STYLE WALK / SHOPPING</p>
-    <h1>Your shopping <em>bag.</em></h1>
-    <p class="cart-subtitle">
-      Review your selected footwear before contacting our store.
-    </p>
+<main class="container">
+  <div class="heading">
+    <h1>Your Shopping Cart</h1>
+    <p>Review your selection before proceeding.</p>
+  </div>
 
-    <div class="cart-layout">
-      <section>
-        <div id="cartItems" aria-live="polite"></div>
-      </section>
+  <div id="status" class="status">Loading your latest cart and stock details...</div>
 
-      <aside class="cart-summary">
-        <h2>Order summary</h2>
-        <div class="cart-total-row">
-          <span>Items</span>
-          <strong id="itemCount">0</strong>
-        </div>
-        <div class="cart-total-row">
-          <span>Sample subtotal</span>
-          <strong id="subtotal">₹0</strong>
-        </div>
-        <div class="cart-total-row">
-          <span>Delivery</span>
-          <strong>To be confirmed</strong>
-        </div>
-        <div class="cart-total-row">
-          <strong>Sample total</strong>
-          <strong id="total">₹0</strong>
-        </div>
+  <div class="layout">
+    <section class="panel">
+      <h2>Shopping Bag (<span id="itemCount">0</span>)</h2>
+      <div id="cartItems">
+        <p class="muted">Loading products...</p>
+      </div>
+      <a href="products.html" class="btn btn-light">← Continue Shopping</a>
+    </section>
 
-        <a class="cart-action"
-   href="checkout.html"
-   style="display:block;text-align:center;text-decoration:none">
-  PROCEED TO CHECKOUT ↗
-</a>
-<button class="cart-action" id="whatsappOrder">
-  QUICK WHATSAPP ENQUIRY ↗
-</button>
-        <a class="cart-secondary" href="products.html">
-          CONTINUE SHOPPING
-        </a>
+    <aside class="panel">
+      <h2>Order Summary</h2>
+      <div class="summary-row">
+        <span class="muted">Subtotal</span>
+        <strong id="subtotal">₹0</strong>
+      </div>
+      <div class="summary-row">
+        <span class="muted">Delivery</span>
+        <strong>To be confirmed</strong>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="total">₹0</span>
+      </div>
 
-        <p class="cart-warning">
-          Sample catalogue only. This is not a confirmed order or payment.
-          The store must confirm actual stock, size, price and delivery.
-        </p>
-      </aside>
-    </div>
-  </main>
+      <p class="muted" style="font-size:12px;line-height:1.6">
+        Final availability, delivery charges and payment details will be confirmed before your order is accepted.
+      </p>
 
-  <footer>
-    <div class="foot-bottom">
-      <span>© <span id="year"></span> STYLE WALK</span>
-      <span>STEP INTO YOUR STYLE</span>
-    </div>
-  </footer>
+      <a href="checkout.html" id="checkoutBtn" class="btn btn-dark">
+        Proceed to Checkout
+      </a>
 
-  <script>
-    "use strict";
+      <button type="button" id="whatsappOrder" class="btn btn-gold">
+        Enquire on WhatsApp
+      </button>
+    </aside>
+  </div>
+</main>
 
-    const CART_KEY = "styleWalkCartV1";
-    const WHATSAPP_NUMBER = "917695805080";
+<footer>
+  <strong>STYLE WALK</strong><br>
+  Premium Footwear for Men, Women & Kids<br>
+  © <span id="year"></span> STYLE WALK. All rights reserved.
+</footer>
 
-    const catalog = {
-      SW001: {
-        name: "Everyday Runner",
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80"
-      },
-      SW002: {
-        name: "Street Essential",
-        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=300&q=80"
-      },
-      SW003: {
-        name: "Classic Chic",
-        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80"
-      },
-      SW004: {
-        name: "Everyday Comfort",
-        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80"
-      },
-      SW005: {
-        name: "Little Explorer",
-        image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=300&q=80"
-      },
-      SW006: {
-        name: "Playtime Sneaker",
-        image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=300&q=80"
-      },
-      SW007: {
-        name: "Active Flex",
-        image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80"
-      },
-      SW008: {
-        name: "Weekend Style",
-        image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=300&q=80"
-      }
+<script>
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbx6Ycmc-UGrEmiiclFYJ8JH8Ldi1vr0vlvWG-7XSfIV9WLDg90TWW95K5Q_bdUY2vz6uw/exec";
+
+const CART_KEY = "styleWalkCartV1";
+const WHATSAPP_NUMBER = "917695805080";
+
+let productsById = {};
+let inventoryLoaded = false;
+let inventoryError = false;
+let cart = readCart();
+
+const $ = id => document.getElementById(id);
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN");
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
+
+function readCart() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    if (!Array.isArray(saved)) return [];
+
+    return saved.filter(item =>
+      item &&
+      item.id != null &&
+      String(item.id).trim() !== "" &&
+      item.size != null &&
+      String(item.size).trim() !== "" &&
+      Number.isInteger(Number(item.qty)) &&
+      Number(item.qty) > 0
+    ).map(item => ({
+      ...item,
+      id: String(item.id),
+      size: String(item.size),
+      qty: Number(item.qty)
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function findSize(product, size) {
+  return (product.sizes || []).find(
+    entry => String(entry.size) === String(size)
+  );
+}
+
+function getAvailability(item) {
+  const product = productsById[item.id];
+
+  if (!product) {
+    return {
+      product: null,
+      stock: 0,
+      message: "This product is no longer available."
     };
+  }
 
-    const itemsEl = document.getElementById("cartItems");
+  const sizeEntry = findSize(product, item.size);
+  const stock = sizeEntry ? Number(sizeEntry.stock) || 0 : 0;
 
-    function money(amount) {
-      return "₹" + Number(amount).toLocaleString("en-IN");
+  if (stock < 1) {
+    return {
+      product,
+      stock: 0,
+      message: "This size is currently out of stock."
+    };
+  }
+
+  if (item.qty > stock) {
+    return {
+      product,
+      stock,
+      message: "Only " + stock + " available. Quantity adjusted."
+    };
+  }
+
+  return { product, stock, message: "" };
+}
+
+function reconcileCart() {
+  cart = cart.map(item => {
+    const result = getAvailability(item);
+
+    if (!result.product || result.stock < 1) return item;
+
+    return {
+      ...item,
+      qty: Math.min(item.qty, result.stock)
+    };
+  });
+
+  saveCart();
+}
+
+function setStatus(message, isError = false) {
+  $("status").textContent = message;
+  $("status").className = isError ? "status error" : "status";
+}
+
+async function loadInventory() {
+  try {
+    const response = await fetch(API_URL, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Inventory request failed.");
     }
 
-    function readCart() {
-      try {
-        const data = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-        if (!Array.isArray(data)) return [];
+    const data = await response.json();
 
-        return data.filter(item =>
-          item &&
-          typeof item.id === "string" &&
-          catalog[item.id] &&
-          typeof item.size === "string" &&
-          Number.isInteger(item.qty) &&
-          item.qty > 0 &&
-          Number.isFinite(item.price) &&
-          item.price >= 0 &&
-          item.qty <= 99
-        );
-      } catch (error) {
-        return [];
-      }
+    if (!data.success || !Array.isArray(data.products)) {
+      throw new Error("Unexpected inventory response.");
     }
 
-    let cart = readCart();
+    productsById = {};
 
-    function persist() {
-      try {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-      } catch (error) {
-        alert("Unable to save changes in browser storage.");
-      }
-      render();
-    }
+    data.products.forEach(product => {
+      const id = String(product.id ?? product.ProductID ?? "");
+      if (!id) return;
 
-    function render() {
-      if (cart.length === 0) {
-        itemsEl.innerHTML = `
-          <div class="cart-empty">
-            <h2>Your bag is waiting.</h2>
-            <p class="cart-muted">You haven't added any footwear yet.</p>
-            <a class="button dark" href="products.html">EXPLORE FOOTWEAR ↗</a>
-          </div>`;
-      } else {
-        itemsEl.innerHTML = cart.map((item, index) => {
-          const product = catalog[item.id];
-
-          return `
-            <article class="cart-item">
-              <img src="${product.image}" alt="${product.name}">
-              <div>
-                <h2>${product.name}</h2>
-                <div class="cart-muted">
-                  Sample item · Size ${item.size}<br>
-                  ${money(item.price)} each
-                </div>
-                <div class="cart-controls">
-                  <button type="button" data-change="${index}" data-delta="-1"
-                    aria-label="Decrease quantity">−</button>
-                  <strong>${item.qty}</strong>
-                  <button type="button" data-change="${index}" data-delta="1"
-                    aria-label="Increase quantity">+</button>
-                  <button type="button" class="cart-remove"
-                    data-remove="${index}">Remove</button>
-                </div>
-              </div>
-            </article>`;
-        }).join("");
-      }
-
-      const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-      document.getElementById("itemCount").textContent = count;
-      document.getElementById("subtotal").textContent = money(total);
-      document.getElementById("total").textContent = money(total);
-    }
-
-    itemsEl.addEventListener("click", event => {
-      const change = event.target.closest("[data-change]");
-      const remove = event.target.closest("[data-remove]");
-
-      if (change) {
-        const index = Number(change.dataset.change);
-        const delta = Number(change.dataset.delta);
-        if (!cart[index]) return;
-
-        cart[index].qty += delta;
-
-        if (cart[index].qty <= 0) {
-          cart.splice(index, 1);
-        } else if (cart[index].qty > 99) {
-          cart[index].qty = 99;
-          alert("Maximum quantity per item is 99.");
-        }
-
-        persist();
-      }
-
-      if (remove) {
-        cart.splice(Number(remove.dataset.remove), 1);
-        persist();
-      }
+      productsById[id] = {
+        id,
+        name: product.name ?? product.ProductName ?? "Footwear",
+        category: product.category ?? product.Category ?? "",
+        type: product.type ?? product.Type ?? "",
+        price: Number(product.price ?? product.Price ?? 0),
+        oldPrice: Number(product.oldPrice ?? product.OldPrice ?? 0),
+        image: product.image ?? product.ImageURL ?? "",
+        sizes: Array.isArray(product.sizes) ? product.sizes : []
+      };
     });
 
-    document.getElementById("whatsappOrder").addEventListener("click", () => {
-      if (!cart.length) {
-        alert("Your shopping bag is empty.");
-        return;
-      }
+    inventoryLoaded = true;
+    inventoryError = false;
+    reconcileCart();
 
-      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    setStatus("Inventory updated. Product availability is based on the latest data returned by the store.");
+    renderCart();
+  } catch (error) {
+    inventoryError = true;
+    inventoryLoaded = false;
 
-      const lines = cart.map(item =>
-        catalog[item.id].name +
-        " | Size " + item.size +
-        " | Qty " + item.qty +
-        " | " + money(item.price * item.qty)
-      );
+    setStatus(
+      "We couldn't refresh stock details. Your saved cart is preserved. Please try again before ordering.",
+      true
+    );
 
-      const message =
-        "Hello STYLE WALK! I would like to enquire about these SAMPLE products:\n\n" +
-        lines.join("\n") +
-        "\n\nSample subtotal: " + money(total) +
-        "\nPlease confirm actual availability, final prices and delivery charges. " +
-        "I understand this message does not place a confirmed order or payment.";
+    renderCart();
+  }
+}
 
-      window.open(
-        "https://wa.me/" + WHATSAPP_NUMBER +
-        "?text=" + encodeURIComponent(message),
-        "_blank",
-        "noopener"
-      );
-    });
+function renderCart() {
+  const container = $("cartItems");
 
-    document.getElementById("year").textContent = new Date().getFullYear();
-    render();
-  </script>
+  if (!cart.length) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="icon">🛍️</div>
+        <strong>Your cart is empty</strong>
+        <p>Discover your next favourite pair at STYLE WALK.</p>
+        <a href="products.html" class="btn btn-dark">Explore Footwear</a>
+      </div>`;
+    updateSummary();
+    return;
+  }
+
+  if (!inventoryLoaded) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="icon">👟</div>
+        <strong>Your saved cart</strong>
+        <p>Live product and stock details are temporarily unavailable.</p>
+        <button class="btn btn-dark" onclick="loadInventory()">Retry Inventory</button>
+        ${cart.map((item, index) => `
+          <button class="btn btn-light" onclick="removeItem(${index})">
+            Remove saved item ${index + 1}
+          </button>`).join("")}
+      </div>`;
+    updateSummary();
+    return;
+  }
+
+  container.innerHTML = cart.map((item, index) => {
+    const result = getAvailability(item);
+    const product = result.product;
+
+    if (!product) {
+      return `
+        <article class="item">
+          <div>
+            <div class="item-name">Unavailable product</div>
+            <div class="item-meta">ID: ${escapeHTML(item.id)} · Size ${escapeHTML(item.size)}</div>
+            <div class="notice">${escapeHTML(result.message)}</div>
+            <button class="remove" onclick="removeItem(${index})">Remove</button>
+          </div>
+        </article>`;
+    }
+
+    const image = product.image || "";
+    const unavailable = result.stock < 1;
+
+    return `
+      <article class="item">
+        <img
+          src="${escapeHTML(image)}"
+          alt="${escapeHTML(product.name)}"
+          onerror="this.style.visibility='hidden'"
+        >
+        <div>
+          <div class="item-name">${escapeHTML(product.name)}</div>
+          <div class="item-meta">
+            ${escapeHTML(product.category)}${product.type ? " · " + escapeHTML(product.type) : ""}
+            <br>Size: ${escapeHTML(item.size)}
+            <br>${unavailable ? "Out of stock" : "Stock available: " + result.stock}
+          </div>
+
+          <div class="item-price">${money(product.price)}</div>
+
+          <div class="item-actions">
+            <div class="qty">
+              <button onclick="changeQty(${index}, -1)" aria-label="Decrease quantity">−</button>
+              <span>${item.qty}</span>
+              <button
+                onclick="changeQty(${index}, 1)"
+                aria-label="Increase quantity"
+                ${unavailable || item.qty >= result.stock ? "disabled" : ""}
+              >+</button>
+            </div>
+            <button class="remove" onclick="removeItem(${index})">Remove</button>
+          </div>
+
+          ${result.message ? `<div class="notice">${escapeHTML(result.message)}</div>` : ""}
+          ${unavailable ? `<div class="notice">Remove this item or check again later.</div>` : ""}
+        </div>
+      </article>`;
+  }).join("");
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const validItems = inventoryLoaded
+    ? cart.filter(item => {
+        const result = getAvailability(item);
+        return result.product && result.stock > 0 && item.qty <= result.stock;
+      })
+    : [];
+
+  const count = validItems.reduce((sum, item) => sum + item.qty, 0);
+
+  const subtotal = validItems.reduce((sum, item) => {
+    return sum + productsById[item.id].price * item.qty;
+  }, 0);
+
+  $("itemCount").textContent = count;
+  $("subtotal").textContent = money(subtotal);
+  $("total").textContent = money(subtotal);
+
+  $("checkoutBtn").style.pointerEvents =
+    inventoryLoaded && validItems.length === cart.length && cart.length > 0
+      ? "auto" : "none";
+
+  $("checkoutBtn").style.opacity =
+    inventoryLoaded && validItems.length === cart.length && cart.length > 0
+      ? "1" : ".45";
+}
+
+function changeQty(index, amount) {
+  if (!inventoryLoaded) {
+    setStatus("Refresh inventory before changing quantities.", true);
+    return;
+  }
+
+  const item = cart[index];
+  if (!item) return;
+
+  const result = getAvailability(item);
+
+  if (!result.product || result.stock < 1) {
+    setStatus("This item or size is unavailable. Remove it from your cart.", true);
+    return;
+  }
+
+  const nextQty = item.qty + amount;
+
+  if (nextQty < 1) {
+    removeItem(index);
+    return;
+  }
+
+  if (nextQty > result.stock) {
+    setStatus("Only " + result.stock + " pair(s) are currently available in this size.", true);
+    return;
+  }
+
+  cart[index].qty = nextQty;
+  saveCart();
+  renderCart();
+  setStatus("Cart updated.");
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+  renderCart();
+  setStatus("Item removed from your cart.");
+}
+
+$("whatsappOrder").addEventListener("click", () => {
+  if (!inventoryLoaded) {
+    setStatus("Please refresh inventory before sending your enquiry.", true);
+    return;
+  }
+
+  if (!cart.length) {
+    setStatus("Your cart is empty.", true);
+    return;
+  }
+
+  const lines = [];
+  let valid = true;
+  let total = 0;
+
+  cart.forEach(item => {
+    const result = getAvailability(item);
+
+    if (!result.product || result.stock < 1 || item.qty > result.stock) {
+      valid = false;
+      return;
+    }
+
+    const product = result.product;
+    const amount = product.price * item.qty;
+    total += amount;
+
+    lines.push(
+      product.name +
+      " | Size: " + item.size +
+      " | Qty: " + item.qty +
+      " | Amount: " + money(amount)
+    );
+  });
+
+  if (!valid) {
+    setStatus("Some cart items are unavailable or exceed current stock. Please review your cart.", true);
+    renderCart();
+    return;
+  }
+
+  const message =
+    "Hello STYLE WALK! I would like to enquire about these products:\n\n" +
+    lines.join("\n") +
+    "\n\nSubtotal: " + money(total) +
+    "\nPlease confirm availability, delivery charges and payment options.";
+
+  const url =
+    "https://wa.me/" + WHATSAPP_NUMBER +
+    "?text=" + encodeURIComponent(message);
+
+  window.open(url, "_blank");
+});
+
+$("year").textContent = new Date().getFullYear();
+
+renderCart();
+loadInventory();
+</script>
 </body>
 </html>
