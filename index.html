@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,84 @@
   <meta name="description" content="Discover stylish footwear for men, women and kids at STYLE WALK. Explore everyday essentials and statement styles.">
   <title>STYLE WALK | Step Into Your Style</title>
   <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    /* Homepage category navigation */
+    .category-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: #f7f5f0;
+      border-bottom: 1px solid #dedbd4;
+    }
+
+    .category-nav a {
+      padding: 15px 28px;
+      color: #191919;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      transition: background .2s, color .2s;
+    }
+
+    .category-nav a:hover {
+      background: #191919;
+      color: #fff;
+    }
+
+    /* Keep the full logo proportional */
+    .brand-logo {
+      display: block;
+      width: 100%;
+      max-width: 230px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* Make category cards feel clickable */
+    .categories .category {
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .categories .category span {
+      display: inline-block;
+      margin-top: 12px;
+    }
+
+    .categories .category:focus-visible,
+    .category-nav a:focus-visible {
+      outline: 2px solid #c6a15b;
+      outline-offset: 4px;
+    }
+
+    /* Footer logo image */
+    .footer-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .category-nav a {
+        flex: 1;
+        padding: 14px 8px;
+        text-align: center;
+        font-size: 11px;
+        letter-spacing: 1px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
   <div class="announcement">
@@ -15,36 +93,38 @@
   </div>
 
   <header class="header">
-  <a class="brand" href="index.html" aria-label="STYLE WALK home">
-    <img
-      class="mark"
-      src="assets/Images/logo.png"
-      alt="STYLE WALK Logo"
-    >
-    <span>
-      STYLE WALK
-      <small>FIND YOUR NEXT STEP</small>
-    </span>
-  </a>
-
-    <nav class="category-nav" aria-label="Shop by category">
-  <a href="products.html#men">MEN</a>
-  <a href="products.html#women">WOMEN</a>
-  <a href="products.html#kids">KIDS</a>
-    </nav>
+    <a class="brand" href="index.html" aria-label="STYLE WALK home">
+      <img
+        class="mark"
+        src="assets/Images/logo.png"
+        alt="STYLE WALK Logo"
+      >
+      <span>
+        STYLE WALK
+        <small>FIND YOUR NEXT STEP</small>
+      </span>
+    </a>
 
     <nav aria-label="Main navigation">
-      <a href="#men">Men</a>
-      <a href="#women">Women</a>
-      <a href="#kids">Kids</a>
+      <a href="products.html#men">Men</a>
+      <a href="products.html#women">Women</a>
+      <a href="products.html#kids">Kids</a>
       <a href="#featured">Featured</a>
       <a href="#contact">Contact</a>
     </nav>
 
-    <a href="#featured">SHOP ↗</a>
+    <a href="products.html" class="button dark">SHOP ↗</a>
   </header>
 
+  <nav class="category-nav" aria-label="Shop by category">
+    <a href="products.html#men">MEN</a>
+    <a href="products.html#women">WOMEN</a>
+    <a href="products.html#kids">KIDS</a>
+  </nav>
+
   <main>
+
+    <!-- Hero section -->
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">THE NEW FOOTWEAR EDITION</p>
@@ -54,9 +134,16 @@
           From timeless classics to fresh new looks,
           find your next favourite pair.
         </p>
-        <a class="button dark" href="#categories">EXPLORE COLLECTION ↗</a>
+        <a class="button dark" href="products.html">
+          EXPLORE COLLECTION ↗
+        </a>
       </div>
-      <div class="hero-image" role="img" aria-label="Featured sneaker collection"></div>
+
+      <div
+        class="hero-image"
+        role="img"
+        aria-label="Featured sneaker collection"
+      ></div>
     </section>
 
     <div class="ticker">
@@ -64,6 +151,7 @@
       &nbsp; • &nbsp; YOUR STYLE, YOUR WALK
     </div>
 
+    <!-- Category section -->
     <section class="section" id="categories">
       <div class="section-title">
         <div>
@@ -73,96 +161,123 @@
       </div>
 
       <div class="categories">
-        <a class="category men" id="men" href="#featured">
+
+        <a class="category men" href="products.html#men">
           <p class="eyebrow">THE EVERYDAY EDIT</p>
           <h3>Men</h3>
           <span>EXPLORE ↗</span>
         </a>
 
-        <a class="category women" id="women" href="#featured">
+        <a class="category women" href="products.html#women">
           <p class="eyebrow">MADE TO STAND OUT</p>
           <h3>Women</h3>
           <span>EXPLORE ↗</span>
         </a>
 
-        <a class="category kids" id="kids" href="#featured">
+        <a class="category kids" href="products.html#kids">
           <p class="eyebrow">LITTLE BIG STEPS</p>
           <h3>Kids</h3>
           <span>EXPLORE ↗</span>
         </a>
+
       </div>
     </section>
 
+    <!-- Featured styles -->
     <section class="section" id="featured">
       <div class="section-title">
         <div>
           <p class="eyebrow">A FIRST LOOK</p>
           <h2>Featured <em>styles.</em></h2>
         </div>
-        <span>OUR SAMPLE EDIT</span>
+        <a class="quick" href="products.html">SHOP ALL ↗</a>
       </div>
 
       <div class="products">
+
         <article class="product">
-          <a class="photo" href="#contact">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
-              alt="Red athletic sneaker" loading="lazy">
+          <a class="photo" href="products.html#men">
+            <img
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+              alt="Red athletic sneaker"
+              loading="lazy"
+            >
           </a>
           <div class="product-info">
-            <small>SPORT / SAMPLE</small>
+            <small>MEN / SPORTS</small>
             <h3>Everyday Runner</h3>
-            <b>Price to be confirmed</b>
-            <a class="quick" href="#contact">ASK ABOUT THIS STYLE ↗</a>
+            <a class="quick" href="products.html#men">
+              EXPLORE MEN'S FOOTWEAR ↗
+            </a>
           </div>
         </article>
 
         <article class="product">
-          <a class="photo" href="#contact">
-            <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80"
-              alt="Women's fashion footwear" loading="lazy">
+          <a class="photo" href="products.html#women">
+            <img
+              src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80"
+              alt="Women's fashion footwear"
+              loading="lazy"
+            >
           </a>
           <div class="product-info">
-            <small>WOMEN / SAMPLE</small>
+            <small>WOMEN / FASHION</small>
             <h3>Classic Chic</h3>
-            <b>Price to be confirmed</b>
-            <a class="quick" href="#contact">ASK ABOUT THIS STYLE ↗</a>
+            <a class="quick" href="products.html#women">
+              EXPLORE WOMEN'S FOOTWEAR ↗
+            </a>
           </div>
         </article>
 
         <article class="product">
-          <a class="photo" href="#contact">
-            <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80"
-              alt="Casual canvas sneaker" loading="lazy">
+          <a class="photo" href="products.html#men">
+            <img
+              src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80"
+              alt="Casual canvas sneaker"
+              loading="lazy"
+            >
           </a>
           <div class="product-info">
-            <small>CASUAL / SAMPLE</small>
+            <small>CASUAL / EVERYDAY</small>
             <h3>Street Essential</h3>
-            <b>Price to be confirmed</b>
-            <a class="quick" href="#contact">ASK ABOUT THIS STYLE ↗</a>
+            <a class="quick" href="products.html">
+              DISCOVER MORE ↗
+            </a>
           </div>
         </article>
 
         <article class="product">
-          <a class="photo" href="#contact">
-            <img src="https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=700&q=80"
-              alt="Casual footwear inspiration" loading="lazy">
+          <a class="photo" href="products.html#kids">
+            <img
+              src="https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=700&q=80"
+              alt="Kids' footwear inspiration"
+              loading="lazy"
+            >
           </a>
           <div class="product-info">
-            <small>KIDS / SAMPLE</small>
+            <small>KIDS / EVERYDAY</small>
             <h3>Little Explorer</h3>
-            <b>Price to be confirmed</b>
-            <a class="quick" href="#contact">ASK ABOUT THIS STYLE ↗</a>
+            <a class="quick" href="products.html#kids">
+              EXPLORE KIDS' FOOTWEAR ↗
+            </a>
           </div>
         </article>
+
       </div>
 
       <p class="eyebrow" style="margin-top:24px">
-        SAMPLE PRODUCTS ONLY — REPLACE WITH ACTUAL SHOP STOCK AND PRICES.
+        FEATURED PHOTOS ARE STYLE INSPIRATION.
+        CHECK THE SHOP PAGE FOR LIVE PRODUCTS, SIZES AND PRICES.
       </p>
     </section>
 
+    <!-- Editorial section -->
     <section class="editorial">
-      <div role="img" aria-label="Footwear style inspiration"></div>
+      <div
+        role="img"
+        aria-label="Footwear style inspiration"
+      ></div>
+
       <article>
         <p class="eyebrow">YOUR STYLE JOURNEY</p>
         <h2>Good shoes.<br><em>Great stories.</em></h2>
@@ -170,56 +285,91 @@
           From everyday comfort to occasions worth dressing up for,
           find a pair that feels like you.
         </p>
-        <a class="button light" href="#contact">CONTACT OUR STORE ↗</a>
+        <a class="button light" href="products.html">
+          DISCOVER THE COLLECTION ↗
+        </a>
       </article>
     </section>
 
+    <!-- Contact section -->
     <section class="promo" id="contact">
       <div>
         <p class="eyebrow">LET'S FIND YOUR NEXT PAIR</p>
         <h2>Walk in style.</h2>
-        <p>Contact STYLE WALK for product availability, sizes and prices.</p>
+        <p>
+          Contact STYLE WALK for product availability,
+          sizes and prices.
+        </p>
         <p>Store phone: 076958 05080</p>
       </div>
+
       <div>
-        <a class="button dark"
+        <a
+          class="button dark"
           href="https://wa.me/917695805080?text=Hello%20STYLE%20WALK%2C%20I%20want%20to%20enquire%20about%20footwear."
-          target="_blank" rel="noopener">
+          target="_blank"
+          rel="noopener"
+        >
           ENQUIRE ON WHATSAPP ↗
         </a>
-        <a class="button light"
+
+        <a
+          class="button light"
           href="https://maps.app.goo.gl/2FuDF5NV2HDEXXCj6?g_st=ac"
-          target="_blank" rel="noopener">
+          target="_blank"
+          rel="noopener"
+        >
           FIND OUR STORE ↗
         </a>
       </div>
     </section>
+
   </main>
 
   <footer>
     <div class="footer-grid">
+
       <div>
-        <div class="brand">
-          <span class="mark">SW</span>
+        <div class="footer-brand">
+          <img
+            class="footer-logo"
+            src="assets/Images/logo.png"
+            alt="STYLE WALK"
+            loading="lazy"
+          >
           <span>STYLE WALK</span>
         </div>
-        <p>Find your next favourite pair.<br>Footwear for men, women and kids.</p>
+        <p>
+          Find your next favourite pair.<br>
+          Footwear for men, women and kids.
+        </p>
       </div>
+
       <div>
         <strong>EXPLORE</strong>
-        <a href="#men">Men's footwear</a>
-        <a href="#women">Women's footwear</a>
-        <a href="#kids">Kids' footwear</a>
-        <a href="#featured">Featured styles</a>
+        <a href="products.html#men">Men's footwear</a>
+        <a href="products.html#women">Women's footwear</a>
+        <a href="products.html#kids">Kids' footwear</a>
+        <a href="products.html">All footwear</a>
       </div>
+
       <div>
         <strong>CONTACT</strong>
         <a href="tel:+917695805080">076958 05080</a>
-        <a href="https://wa.me/917695805080">WhatsApp us</a>
-        <a href="https://maps.app.goo.gl/2FuDF5NV2HDEXXCj6?g_st=ac"
-          target="_blank" rel="noopener">Store location</a>
+        <a
+          href="https://wa.me/917695805080"
+          target="_blank"
+          rel="noopener"
+        >WhatsApp us</a>
+        <a
+          href="https://maps.app.goo.gl/2FuDF5NV2HDEXXCj6?g_st=ac"
+          target="_blank"
+          rel="noopener"
+        >Store location</a>
       </div>
+
     </div>
+
     <div class="foot-bottom">
       <span>© <span id="year"></span> STYLE WALK</span>
       <span>STEP INTO YOUR STYLE</span>
@@ -227,7 +377,7 @@
   </footer>
 
   <script>
-    document.getElementById('year').textContent =
+    document.getElementById("year").textContent =
       new Date().getFullYear();
   </script>
 
